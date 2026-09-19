@@ -58,5 +58,18 @@ services:
       - backend
     restart: always
 
+  minio:
+    image: firstfinger/minio:latest    
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_NAME}
+      MINIO_ROOT_PASSWORD: ${MINIO_ACCESS_SECRET}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: always
+
 volumes:
   db_data:
+  minio_data:
