@@ -22,7 +22,7 @@ public class AuthService {
         this.tokenSecurity = tokenSecurity;
     }
     
-    public void register(RegisterRequest registerRequest) {
+    public String register(RegisterRequest registerRequest) {
         
         Users user = new Users();
         user.setUsername(registerRequest.getUsername());
@@ -33,6 +33,7 @@ public class AuthService {
         user.setStatus(registerRequest.getStatus());
 
         usersRepository.save(user);
+        return tokenSecurity.generateToken(user);
     }
 
     public String login(LoginRequest loginRequest) {

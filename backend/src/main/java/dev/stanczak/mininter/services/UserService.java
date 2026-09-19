@@ -30,7 +30,7 @@ public class UserService {
         minioClient.putObject(
             PutObjectArgs.builder()
                 .bucket("avatars")
-                .object(users.getId().toString())
+                .object(users.getId().toString() + "/avatar.jpg")
                 .stream(file.getInputStream(), file.getSize(), (long) -1)
                 .contentType(file.getContentType())
                 .build()
