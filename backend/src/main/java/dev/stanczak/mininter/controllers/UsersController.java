@@ -50,4 +50,10 @@ public class UsersController {
         return ApiResponse.ok("Upload realizado com sucesso", null);
     }
 
+    @GetMapping ("/avatar")
+    public ApiResponse<String> getAvatar(@AuthenticationPrincipal Users users) throws Exception{
+        String avatarUrl = userService.getAvatar(users);
+        return ApiResponse.ok("Avatar recuperado com sucesso", avatarUrl);
+    }
+
 }
