@@ -30,17 +30,11 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws ServletException, IOException {
 
         String token = recoverToken(request);
-
         if (token != null && !token.isBlank()) {
             String email = tokenSecurity.validateToken(token);
-
             if (email != null && !email.isBlank()) {
                 Users user = usersRepository.findByEmail(email);
 
@@ -54,6 +48,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
+                            
                 }
             }
         }
