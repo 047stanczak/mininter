@@ -6,3 +6,8 @@ export interface RegisterRequest {
   bio?: string;
   status?: string;
 }
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}

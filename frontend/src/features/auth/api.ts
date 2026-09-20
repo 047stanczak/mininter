@@ -1,6 +1,10 @@
 import { apiPost } from "@/api/client";
-import type { RegisterRequest } from "./types";
+import type { LoginRequest, RegisterRequest } from "./types";
 
 export function register(payload: RegisterRequest) {
-  return apiPost<void, RegisterRequest>("/auth/register", payload);
+  return apiPost<string, RegisterRequest>("/auth/register", payload);
+}
+
+export function login(payload: LoginRequest) {
+  return apiPost<string, LoginRequest>("/auth/login", payload);
 }
