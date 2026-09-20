@@ -24,8 +24,5 @@ dist-ssr
 *.sw?
 .env
 
-frontend/src/**/*.js
-frontend/tsconfig.tsbuildinfo
-
-frontend/src/**/*.js
-frontend/tsconfig.tsbuildinfo
+/src/**/*.js
+*.tsbuildinfo
