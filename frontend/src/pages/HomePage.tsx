@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { getToken } from "@/api/token";
+import { useAuth } from "@/api/AuthContext";
 
 export function HomePage() {
-  const isAuthenticated = Boolean(getToken());
+  const { isAuthenticated } = useAuth();
 
   return (
     <main className="page">
