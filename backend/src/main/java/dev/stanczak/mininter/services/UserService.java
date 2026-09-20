@@ -1,6 +1,5 @@
 package dev.stanczak.mininter.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,11 +11,13 @@ import io.minio.PutObjectArgs;
 @Service
 public class UserService {
 
-    @Autowired 
-    MinioClient minioClient;
+    private final MinioClient minioClient;
+    private final ImageValidator imageValidator;
 
-    @Autowired 
-    ImageValidator imageValidator;
+    UserService(MinioClient minioClient, ImageValidator imageValidator) {
+        this.minioClient = minioClient;
+        this.imageValidator = imageValidator;
+    }
 
     public void uploadAvatar(Users users, MultipartFile file) throws Exception {
 

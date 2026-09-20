@@ -1,6 +1,5 @@
 package dev.stanczak.mininter.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +18,11 @@ import dev.stanczak.mininter.services.UserService;
 @RequestMapping("/api/users")
 public class UsersController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    UsersController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{userId}")
     public String getUser() {
