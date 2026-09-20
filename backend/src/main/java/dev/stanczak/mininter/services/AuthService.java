@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import dev.stanczak.mininter.dto.LoginRequest;
 import dev.stanczak.mininter.dto.RegisterRequest;
+import dev.stanczak.mininter.exceptions.EmailAlreadyExistsException;
+import dev.stanczak.mininter.exceptions.InvalidCredentialsException;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.repositories.UsersRepository;
 import dev.stanczak.mininter.security.TokenSecurity;
@@ -23,6 +25,10 @@ public class AuthService {
     }
     
     public String register(RegisterRequest registerRequest) {
+
+        if (usersRepository.findByEmail(registerRequest.getEmail()) != null) {
+            throw new EmailAlreadyExistsException("Email já cadastrado");
+        }
         
         Users user = new Users();
         user.setUsername(registerRequest.getUsername());
@@ -39,12 +45,8 @@ public class AuthService {
     public String login(LoginRequest loginRequest) {
         Users user = usersRepository.findByEmail(loginRequest.getEmail());
 
-        if (user == null) {
-            throw new RuntimeException("Usuário não encontrado");
-        }
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Credenciais inválidas");
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Email ou senha inválidos");
         }
 
         return tokenSecurity.generateToken(user);
