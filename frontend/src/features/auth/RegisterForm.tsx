@@ -28,10 +28,6 @@ export function RegisterForm() {
     submit(form);
   }
 
-  if (status === "success") {
-    return <p className="success-message">Cadastro realizado com sucesso.</p>;
-  }
-
   return (
     <form className="form" onSubmit={handleSubmit}>
       <Input
