@@ -1,19 +1,33 @@
 package dev.stanczak.mininter.controllers;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.stanczak.mininter.api.ApiResponse;
+import dev.stanczak.mininter.dto.PostRequest;
+import dev.stanczak.mininter.models.Users;
+import dev.stanczak.mininter.services.PostService;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
-    @PostMapping
-    public String createPost() {
-        return "Create post endpoint";
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ApiResponse<String> createPost(@AuthenticationPrincipal Users users, @ModelAttribute PostRequest postRequest) throws Exception {
+        postService.createPost(users, postRequest);
+        return ApiResponse.ok("Post criado com sucesso", null);
     }
 
     @GetMapping
