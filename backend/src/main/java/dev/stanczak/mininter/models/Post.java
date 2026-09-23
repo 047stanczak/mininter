@@ -25,12 +25,15 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "image_key")
+    private String imageKey;
+
 
     @Column(nullable = false)
-    private String visibility;
+    private String visibility = "public";
 
     @Column(nullable = false)
-    private String status;
+    private String status = "active";
 
 
     @Column(name = "created_at")
@@ -72,6 +75,16 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+
+    public String getImageKey() {
+        return imageKey;
+    }
+
+
+    public void setImageKey(String imageKey) {
+        this.imageKey = imageKey;
     }
 
 
@@ -123,5 +136,7 @@ public class Post {
     public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;
     }
+
+
 
 }

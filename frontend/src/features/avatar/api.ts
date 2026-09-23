@@ -1,4 +1,8 @@
-import { apiPostForm } from "@/api/client";
+import { apiGet, apiPostForm } from "@/api/client";
+
+export function getAvatar() {
+  return apiGet<string>("/users/avatar");
+}
 
 export function uploadAvatar(file: File) {
   const body = new FormData();

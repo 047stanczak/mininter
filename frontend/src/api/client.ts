@@ -38,6 +38,18 @@ async function parseResponse<T>(
   return json;
 }
 
+export async function apiGet<TResponse>(
+  path: string
+): Promise<ApiResponse<TResponse>> {
+  const headers = authHeaders();
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "GET",
+    headers,
+  });
+
+  return parseResponse<TResponse>(res, Boolean(headers.Authorization));
+}
+
 export async function apiPost<TResponse, TBody>(
   path: string,
   body: TBody

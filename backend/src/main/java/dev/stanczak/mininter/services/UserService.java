@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import dev.stanczak.mininter.models.Users;
+import dev.stanczak.mininter.repositories.UsersRepository;
 import dev.stanczak.mininter.validation.ImageValidator;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.Http.Method;
@@ -18,15 +19,18 @@ public class UserService {
     private final MinioClient minioClient;
     private final MinioClient minioPublicClient;
     private final ImageValidator imageValidator;
+    private final UsersRepository usersRepository;
 
     public UserService(
             @Qualifier("minioClient") MinioClient minioClient,
             @Qualifier("minioPublicClient") MinioClient minioPublicClient,
-            ImageValidator imageValidator
+            ImageValidator imageValidator,
+            UsersRepository usersRepository
     ) {
         this.minioClient = minioClient;
         this.minioPublicClient = minioPublicClient;
         this.imageValidator = imageValidator;
+        this.usersRepository = usersRepository;
     }
 
     public void uploadAvatar(Users users, MultipartFile file) throws Exception {
@@ -46,6 +50,9 @@ public class UserService {
                 .contentType(file.getContentType())
                 .build()
         );
+
+        users.setAvatarKey(users.getId() + "/avatar.jpg");
+        usersRepository.save(users);
     }
 
     public String getAvatar(Users users) throws Exception {

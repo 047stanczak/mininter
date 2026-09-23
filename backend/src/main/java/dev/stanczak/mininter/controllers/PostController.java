@@ -1,5 +1,7 @@
 package dev.stanczak.mininter.controllers;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.stanczak.mininter.api.ApiResponse;
 import dev.stanczak.mininter.dto.PostRequest;
+import dev.stanczak.mininter.dto.PostResponse;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.services.PostService;
 
@@ -31,8 +34,8 @@ public class PostController {
     }
 
     @GetMapping
-    public String getPosts() {
-        return "Get posts endpoint";
+    public ApiResponse<List<PostResponse>> getPosts() throws Exception {
+        return ApiResponse.ok("Posts encontrados", postService.getPosts());
     }
 
     @GetMapping("/{postId}")

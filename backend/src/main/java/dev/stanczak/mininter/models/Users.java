@@ -32,8 +32,8 @@ public class Users {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
-    @Column(name = "avatar_url")
-    private String avatarUrl;
+    @Column(name = "avatar_key")
+    private String avatarKey;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -95,12 +95,12 @@ public class Users {
         this.bio = bio;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatarKey() {
+        return avatarKey;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatarKey(String avatarKey) {
+        this.avatarKey = avatarKey;
     }
 
     public LocalDateTime getCreatedAt() {
