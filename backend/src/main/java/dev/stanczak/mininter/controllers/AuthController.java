@@ -23,7 +23,7 @@ public class AuthController {
    @PostMapping("/register")
     public ApiResponse<String> register(@RequestBody RegisterRequest registerRequest) {
         String token = authService.register(registerRequest);
-        return ApiResponse.ok("Usuário registrado com sucesso", token);
+        return ApiResponse.created("Usuário registrado com sucesso", token);
     }
 
     @PostMapping("/login")
