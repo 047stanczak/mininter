@@ -1,5 +1,7 @@
 package dev.stanczak.mininter.services;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,7 @@ public class AuthService {
         }
         
         Users user = new Users();
+        user.setCreatedAt(LocalDateTime.now());
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -49,6 +52,7 @@ public class AuthService {
             throw new InvalidCredentialsException("Email ou senha inválidos");
         }
 
+        user.setLastLoginAt(LocalDateTime.now());
         return tokenSecurity.generateToken(user);
     }
 
