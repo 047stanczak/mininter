@@ -1,9 +1,13 @@
 package dev.stanczak.mininter.services;
 
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import dev.stanczak.mininter.dto.UserResponse;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.repositories.UsersRepository;
 import dev.stanczak.mininter.validation.ImageValidator;
@@ -65,4 +69,16 @@ public class UserService {
                 .build()
         );
     }
+
+    public Optional<UserResponse> getUsersById(Long id) {
+        return usersRepository.findById(id).map(u -> {
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUsername(u.getUsername());
+            userResponse.setDisplayName(u.getDisplayName());
+            userResponse.setBio(u.getBio());
+            userResponse.setAvatarKey(u.getAvatarKey());
+            return userResponse;
+        });
+    }
+
 }
