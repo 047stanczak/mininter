@@ -36,18 +36,21 @@ public class PostService {
     
     public void createPost(Users users, PostRequest postRequest) throws Exception {
 
-        imageValidator.validatePostImage(postRequest.getImage());
+        String imageKey = null;
 
-        String imageKey = users.getId() + "/" + System.currentTimeMillis() + ".jpg";
+        if (postRequest.getImage() != null && !postRequest.getImage().isEmpty()) {
+            imageKey = users.getId() + "/" + System.currentTimeMillis() + ".jpg";
+            imageValidator.validatePostImage(postRequest.getImage());
 
-        minioClient.putObject(
-            io.minio.PutObjectArgs.builder()
-                .bucket("posts")
-                .object(imageKey)
-                .stream(postRequest.getImage().getInputStream(), postRequest.getImage().getSize(), (long) -1)
-                .contentType(postRequest.getImage().getContentType())
-                .build()
-        );
+            minioClient.putObject(
+                io.minio.PutObjectArgs.builder()
+                    .bucket("posts")
+                    .object(imageKey)
+                    .stream(postRequest.getImage().getInputStream(), postRequest.getImage().getSize(), (long) -1)
+                    .contentType(postRequest.getImage().getContentType())
+                    .build()
+            );
+        }
 
         Post post = new Post();
         post.setAuthor(users);
@@ -62,14 +65,16 @@ public class PostService {
         for (Post post : postRepository.findAll()) {
             PostResponse postResponse = new PostResponse();
             postResponse.setContent(post.getContent());
-            postResponse.setImageUrl(minioPublicClient.getPresignedObjectUrl(
-                io.minio.GetPresignedObjectUrlArgs.builder()
-                    .method(Method.GET)
-                    .bucket("posts")
-                    .object(post.getImageKey())
-                    .expiry(60 * 60)
-                    .build()
-            ));
+            if (post.getImageKey() != null) {
+                postResponse.setImageUrl(minioPublicClient.getPresignedObjectUrl(
+                    io.minio.GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket("posts")
+                        .object(post.getImageKey())
+                        .expiry(60 * 60)
+                        .build()
+                ));
+            }
             responses.add(postResponse);
         }
 
