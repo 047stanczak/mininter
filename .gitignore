@@ -1,6 +1,8 @@
 
 # Claude configuration
 CLAUDE.md
+.claudeignore
+ROADMAP.md 
 frontend/CLAUDE.md
 .claude
 .github
