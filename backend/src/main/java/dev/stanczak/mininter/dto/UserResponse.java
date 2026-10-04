@@ -5,7 +5,7 @@ public class UserResponse {
     private String username;
     private String displayName;
     private String bio;
-    private String avatarKey;
+    private String imageUrl;
     public String getUsername() {
         return username;
     }
@@ -24,11 +24,11 @@ public class UserResponse {
     public void setBio(String bio) {
         this.bio = bio;
     }
-    public String getAvatarKey() {
-        return avatarKey;
+    public String imageUrl() {
+        return imageUrl;
     }
-    public void setAvatarKey(String avatarKey) {
-        this.avatarKey = avatarKey;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
     
     

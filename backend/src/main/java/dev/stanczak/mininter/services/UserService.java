@@ -1,3 +1,4 @@
+
 package dev.stanczak.mininter.services;
 
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import dev.stanczak.mininter.api.ApiResponse;
 import dev.stanczak.mininter.dto.UserResponse;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.repositories.UsersRepository;
@@ -38,7 +40,7 @@ public class UserService {
     }
 
     public void uploadAvatar(Users users, MultipartFile file) throws Exception {
-        
+
         // Feed (Quadrado): 1080 × 1080 px (proporção 1:1)
         // Feed (Vertical/Retrato): 1080 × 1350 px (proporção 4:5)
         // Foto de Perfil: 400 × 400 px
@@ -59,26 +61,39 @@ public class UserService {
         usersRepository.save(users);
     }
 
-    public String getAvatar(Users users) throws Exception {
-        return minioPublicClient.getPresignedObjectUrl(
-            GetPresignedObjectUrlArgs.builder()
-                .method(Method.GET)
-                .bucket("avatars")
-                .object(users.getId() + "/avatar.jpg")
-                .expiry(60 * 60)
-                .build()
-        );
-    }
+    public String getAvatar(Users users) {
+        try {
+            return minioPublicClient.getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                    .method(Method.GET)
+                    .bucket("avatars")
+                    .object(users.getId() + "/avatar.jpg")
+                    .expiry(60 * 60)
+                    .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar URL do avatar", e);
+        }
+}
 
     public Optional<UserResponse> getUsersById(Long id) {
         return usersRepository.findById(id).map(u -> {
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUsername(u.getUsername());
-            userResponse.setDisplayName(u.getDisplayName());
-            userResponse.setBio(u.getBio());
-            userResponse.setAvatarKey(u.getAvatarKey());
-            return userResponse;
+            UserResponse r = new UserResponse();
+            r.setUsername(u.getUsername());
+            r.setDisplayName(u.getDisplayName());
+            r.setBio(u.getBio());
+            r.setImageUrl(getAvatar(u));
+            return r;
         });
+    }
+
+    public UserResponse getUserProfileDetails(Users user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(user.getUsername());
+        userResponse.setDisplayName(user.getDisplayName());
+        userResponse.setBio(user.getBio());
+        userResponse.setImageUrl(getAvatar(user));
+        return userResponse;
     }
 
 }

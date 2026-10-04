@@ -1,6 +1,5 @@
-package dev.stanczak.mininter.controllers;
 
-import java.util.Optional;
+package dev.stanczak.mininter.controllers;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +32,12 @@ public class UsersController {
         return userService.getUsersById(userId)
             .map(user -> ApiResponse.ok("Usuário encontrado", user))
             .orElseGet(() -> ApiResponse.notFound("Usuário não encontrado"));
+    }
+
+    @GetMapping("/profile")
+    public ApiResponse<UserResponse> getAuthenticatedUserProfile(@AuthenticationPrincipal Users users) {
+        UserResponse userProfile = userService.getUserProfileDetails(users);
+        return ApiResponse.ok("Perfil recuperado com sucesso", userProfile);
     }
 
     @GetMapping("/{userId}/posts")
