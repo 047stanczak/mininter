@@ -24,7 +24,7 @@ public class UserResponse {
     public void setBio(String bio) {
         this.bio = bio;
     }
-    public String imageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
     public void setImageUrl(String imageUrl) {

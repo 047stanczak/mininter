@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import dev.stanczak.mininter.api.ApiResponse;
 import dev.stanczak.mininter.dto.UserResponse;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.repositories.UsersRepository;
