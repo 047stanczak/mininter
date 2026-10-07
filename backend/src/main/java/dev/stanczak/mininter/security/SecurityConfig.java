@@ -51,7 +51,7 @@ public class SecurityConfig {
                             response.setStatus(401);
                             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                             response.getWriter().write(
-                                    objectMapper.writeValueAsString(ApiResponse.error(403, "Não autenticado"))
+                                    objectMapper.writeValueAsString(ApiResponse.error(401, "Não autenticado"))
                             );
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
