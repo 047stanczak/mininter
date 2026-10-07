@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,18 +40,19 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public String getPost() {
-        return "Get post endpoint";
+    public ApiResponse<PostResponse> getPost(@PathVariable Long postId) {
+        return ApiResponse.ok("Post encontrado", postService.getPostById(postId));
     }
 
     @PatchMapping("/{postId}")
-    public String updatePost() {
-        return "Update post endpoint";
+    public ApiResponse<PostResponse> updatePost(@AuthenticationPrincipal Users users, @PathVariable Long postId, @ModelAttribute PostRequest postRequest) {
+        return ApiResponse.ok("Post atualizado", postService.updatePost(users, postId, postRequest));
     }
 
     @DeleteMapping("/{postId}")
-    public String deletePost() {
-        return "Delete post endpoint";
+    public ApiResponse<String> deletePost(@AuthenticationPrincipal Users users, @PathVariable Long postId) {
+        postService.deletePost(users, postId);
+        return ApiResponse.ok("Post excluído com sucesso", null);
     }
 
     @PostMapping("/{postId}/likes")
