@@ -8,4 +8,5 @@ import dev.stanczak.mininter.models.Users;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
     Users findByEmail(String email);
+    boolean existsByUsername(String username);
 }

@@ -1,6 +1,7 @@
 package dev.stanczak.mininter.services;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import dev.stanczak.mininter.dto.LoginRequest;
 import dev.stanczak.mininter.dto.RegisterRequest;
 import dev.stanczak.mininter.exceptions.EmailAlreadyExistsException;
 import dev.stanczak.mininter.exceptions.InvalidCredentialsException;
+import dev.stanczak.mininter.exceptions.UsernameAlreadyExistsException;
 import dev.stanczak.mininter.models.Users;
 import dev.stanczak.mininter.repositories.UsersRepository;
 import dev.stanczak.mininter.security.TokenSecurity;
@@ -34,7 +36,11 @@ public class AuthService {
         
         Users user = new Users();
         user.setCreatedAt(LocalDateTime.now());
-        user.setUsername(registerRequest.getUsername());
+        String username = registerRequest.getUsername().trim().toLowerCase(Locale.ROOT);
+        if (usersRepository.existsByUsername(username)) {
+            throw new UsernameAlreadyExistsException("Nome de usuário já está em uso");
+        }
+        user.setUsername(username);
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setDisplayName(registerRequest.getDisplayName());

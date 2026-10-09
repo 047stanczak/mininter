@@ -7,4 +7,6 @@ import dev.stanczak.mininter.models.Like;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
+	void deleteByUserId(Long userId);
+	void deleteByPostAuthorId(Long authorId);
 }

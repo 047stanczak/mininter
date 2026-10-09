@@ -26,6 +26,9 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "token_version", nullable = false, columnDefinition = "integer default 0")
+    private int tokenVersion = 0;
+
     @Column(name = "display_name")
     private String displayName;
 
@@ -77,6 +80,14 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getTokenVersion() {
+        return tokenVersion;
+    }
+
+    public void setTokenVersion(int tokenVersion) {
+        this.tokenVersion = tokenVersion;
     }
 
     public String getDisplayName() {

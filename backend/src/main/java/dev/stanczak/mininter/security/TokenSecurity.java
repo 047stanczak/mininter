@@ -28,6 +28,7 @@ public class TokenSecurity {
                     .withSubject(user.getEmail())
                     .withClaim("id", user.getId())
                     .withClaim("username", user.getUsername())
+                    .withClaim("tokenVersion", user.getTokenVersion())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
@@ -45,6 +46,22 @@ public class TokenSecurity {
                     .getSubject();
         } catch (JWTVerificationException exception) {
             return null;
+        }
+    }
+
+    public boolean isTokenValidForUser(String token, Users user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            var decodedToken = JWT.require(algorithm)
+                    .withIssuer("mininter")
+                    .build()
+                    .verify(token);
+            Long tokenUserId = decodedToken.getClaim("id").asLong();
+            Integer tokenVersion = decodedToken.getClaim("tokenVersion").asInt();
+            return user.getId().equals(tokenUserId)
+                    && user.getTokenVersion() == (tokenVersion == null ? 0 : tokenVersion);
+        } catch (JWTVerificationException exception) {
+            return false;
         }
     }
 
