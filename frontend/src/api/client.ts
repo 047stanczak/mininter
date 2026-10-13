@@ -38,9 +38,7 @@ async function parseResponse<T>(
   return json;
 }
 
-export async function apiGet<TResponse>(
-  path: string
-): Promise<ApiResponse<TResponse>> {
+export async function apiGet<TResponse>(path: string): Promise<ApiResponse<TResponse>> {
   const headers = authHeaders();
   const res = await fetch(`${BASE_URL}${path}`, {
     method: "GET",
@@ -80,3 +78,52 @@ export async function apiPostForm<TResponse>(
 
   return parseResponse<TResponse>(res, Boolean(headers.Authorization));
 }
+
+export async function apiPatch<TResponse, TBody>(
+  path: string,
+  body: TBody
+): Promise<ApiResponse<TResponse>> {
+  const headers = authHeaders();
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    body: JSON.stringify(body),
+  });
+
+  return parseResponse<TResponse>(res, Boolean(headers.Authorization));
+}
+
+export async function apiPatchForm<TResponse>(
+  path: string,
+  body: FormData
+): Promise<ApiResponse<TResponse>> {
+  const headers = authHeaders();
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "PATCH",
+    headers,
+    body,
+  });
+
+  return parseResponse<TResponse>(res, Boolean(headers.Authorization));
+}
+
+export async function apiDelete<TResponse, TBody = undefined>(
+  path: string,
+  body?: TBody
+): Promise<ApiResponse<TResponse>> {
+  const headers = authHeaders();
+  const res = await fetch(`${BASE_URL}${path}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  return parseResponse<TResponse>(res, Boolean(headers.Authorization));
+}
+
