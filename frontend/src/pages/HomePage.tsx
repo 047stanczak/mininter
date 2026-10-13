@@ -1,48 +1,67 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/api/AuthContext";
-import { useAvatar } from "@/features/avatar/useAvatar";
+import { usePosts } from "@/features/posts/usePosts";
+import { PostCard } from "@/features/posts/PostCard";
+import { PostComposer } from "@/features/posts/PostComposer";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 export function HomePage() {
-  const { isAuthenticated } = useAuth();
-  const { avatarUrl } = useAvatar();
+  const { isAuthenticated, username } = useAuth();
+  const { posts, loading, error, pending, submitPost, removePost } = usePosts();
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  async function handleConfirmDelete() {
+    if (deleteId === null) return;
+    await removePost(deleteId);
+    setDeleteId(null);
+  }
 
   return (
-    <main className="page">
-      <div className="card">
-        <h1>Mininter</h1>
-        {isAuthenticated ? (
-          <>
-            {avatarUrl && (
-              <img
-                src={avatarUrl}
-                alt="Foto de perfil"
-                width={96}
-                height={96}
-              />
-            )}
-            <p className="field-hint">Você está autenticado.</p>
-          </>
+    <main className="feed">
+      {isAuthenticated ? (
+        <PostComposer username={username} pending={pending === "create"} onSubmit={submitPost} />
+      ) : (
+        <div className="post-card welcome">
+          <strong>Bem-vindo ao Mininter</strong>
+          <p>
+            <Link className="text-link" to="/login">Entre</Link> ou{" "}
+            <Link className="text-link" to="/register">crie uma conta</Link> para publicar.
+          </p>
+        </div>
+      )}
+
+      {error && <p className="alert-box" role="alert">{error}</p>}
+
+      <section className="post-list" aria-label="Posts">
+        {loading ? (
+          <p className="field-hint">Carregando posts...</p>
+        ) : posts.length === 0 ? (
+          <p className="field-hint">
+            {isAuthenticated ? "Nenhum post ainda. Seja o primeiro a publicar." : "Nenhum post ainda."}
+          </p>
         ) : (
-          <p className="field-hint">Entre ou crie uma conta para continuar.</p>
+          posts.map((post) => (
+            <PostCard
+              key={post.id}
+              post={post}
+              canDelete={isAuthenticated && post.authorUsername === username}
+              onDelete={setDeleteId}
+            />
+          ))
         )}
-        <nav className="home-links">
-          {!isAuthenticated && (
-            <>
-              <Link className="text-link" to="/login">
-                Entrar
-              </Link>
-              <Link className="text-link" to="/register">
-                Criar conta
-              </Link>
-            </>
-          )}
-          {isAuthenticated && (
-            <Link className="text-link" to="/avatar">
-              Foto de perfil
-            </Link>
-          )}
-        </nav>
-      </div>
+      </section>
+
+      {deleteId !== null && (
+        <ConfirmDialog
+          title="Excluir post"
+          message="Tem certeza de que deseja excluir este post? Esta ação não pode ser desfeita."
+          confirmLabel="Excluir"
+          pending={pending === "delete"}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteId(null)}
+        />
+      )}
     </main>
   );
 }
