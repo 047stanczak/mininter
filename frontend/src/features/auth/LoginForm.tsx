@@ -43,7 +43,7 @@ export function LoginForm() {
         required
       />
 
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className="error-message" role="alert">{error}</p>}
 
       <Button type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Entrando..." : "Entrar"}

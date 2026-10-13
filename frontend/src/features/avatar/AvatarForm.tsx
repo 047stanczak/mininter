@@ -191,7 +191,7 @@ export function AvatarForm() {
         </div>
       )}
 
-      {(editorError || error) && <p className="error-message">{editorError || error}</p>}
+      {(editorError || error) && <p className="error-message" role="alert">{editorError || error}</p>}
 
       <Button type="submit" disabled={status === "loading" || !image}>
         {status === "loading" ? "Enviando..." : "Enviar foto"}

@@ -67,7 +67,7 @@ export function RegisterForm() {
         onChange={handleChange("bio")}
       />
 
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className="error-message" role="alert">{error}</p>}
 
       <Button type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Enviando..." : "Cadastrar"}
