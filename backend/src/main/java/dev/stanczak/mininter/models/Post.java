@@ -1,5 +1,7 @@
 package dev.stanczak.mininter.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,15 +39,15 @@ public class Post {
 
 
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
 
     @Column(name = "updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
 
     @Column(name = "published_at")
-    private String publishedAt;
+    private LocalDateTime publishedAt;
 
 
     public Long getId() {
@@ -108,32 +110,32 @@ public class Post {
     }
 
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
 
-    public String getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
 
-    public String getPublishedAt() {
+    public LocalDateTime getPublishedAt() {
         return publishedAt;
     }
 
 
-    public void setPublishedAt(String publishedAt) {
+    public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
     }
 

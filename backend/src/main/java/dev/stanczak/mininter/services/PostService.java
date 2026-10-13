@@ -1,5 +1,6 @@
 package dev.stanczak.mininter.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class PostService {
         post.setAuthor(users);
         post.setContent(postRequest.getContent());
         post.setImageKey(imageKey);
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUpdatedAt(LocalDateTime.now());
+        post.setPublishedAt(LocalDateTime.now());
         postRepository.save(post);
     }
 
@@ -73,6 +77,8 @@ public class PostService {
             PostResponse postResponse = new PostResponse();
             postResponse.setId(post.getId());
             postResponse.setContent(post.getContent());
+            postResponse.setAuthorUsername(post.getAuthor().getUsername());
+            postResponse.setPublishedAt(post.getPublishedAt());
             if (post.getImageKey() != null) {
                 try {
                     postResponse.setImageUrl(minioPublicClient.getPresignedObjectUrl(
