@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setToken } from "@/api/token";
+import { useAuth } from "@/api/AuthContext";
 import { login } from "./api";
 import type { LoginRequest } from "./types";
 
@@ -8,6 +8,7 @@ type Status = "idle" | "loading" | "error";
 
 export function useLogin() {
   const navigate = useNavigate();
+  const { setToken } = useAuth();
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
